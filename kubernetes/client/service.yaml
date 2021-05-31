@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-jaeger-demo-client
+  labels:
+    app: grpc-jaeger-demo-client
+spec:
+  ports:
+    - name: grpc
+      port: 5001
+      protocol: TCP
+      targetPort: 5001
+  selector:
+    app: grpc-jaeger-demo-client

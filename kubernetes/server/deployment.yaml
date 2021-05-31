@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+      app: grpc-jaeger-demo-server
+  name: grpc-jaeger-demo-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grpc-jaeger-demo-server
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: grpc-jaeger-demo-server
+    spec:
+      containers:
+      - command:
+        - /bin/serverd
+        image:  dockerhub.io/pedramteymoori/grpc-jaeger-demo:latest
+        imagePullPolicy: Always
+        name: grpc-jaeger-demo-server
+        ports:
+        - containerPort: 5001
+          protocol: TCP
+      imagePullSecrets:
+      - name: grpc-jaeger-demo-registry-secret
+      restartPolicy: Always
