@@ -13,7 +13,7 @@ func main() {
 	oce, err := ocagent.NewExporter(
 		ocagent.WithInsecure(),
 		ocagent.WithReconnectionPeriod(5*time.Second),
-		ocagent.WithAddress("collector.linkerd-jaeger:55678"),
+		ocagent.WithAddress("otel-collector.jaeger:55678"),
 		ocagent.WithServiceName("pedram-client"))
 	if err != nil {
 		log.Fatalf("Failed to create ocagent-exporter: %v", err)
