@@ -6,14 +6,18 @@ import (
 	"os"
 
 	"github.com/pedramteymoori/grpc-jaeger-demo/protocols"
-	"go.opencensus.io/plugin/ocgrpc"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 )
 
 type Client struct{}
 
 func (dc Client) Run() {
-	grpcDialOpts := []grpc.DialOption{grpc.WithInsecure(), grpc.WithStatsHandler(new(ocgrpc.ClientHandler))}
+	grpcDialOpts := []grpc.DialOption{
+		grpc.WithInsecure(),
+		grpc.WithUnaryInterceptor(otelgrpc.UnaryClientInterceptor()),
+	}
+
 	path := os.Getenv("SERVER_URL")
 	conn, _ := grpc.Dial(path, grpcDialOpts...)
 	cli := protocols.NewDemoClient(conn)
